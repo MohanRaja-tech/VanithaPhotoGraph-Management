@@ -1,0 +1,41 @@
+# Google Drive Integration Requirements
+# Install these additional packages for Google Drive functionality
+
+# Core Google API packages
+google-auth==2.23.4
+google-auth-oauthlib==1.1.0
+google-auth-httplib2==0.1.1
+google-api-python-client==2.108.0
+
+# Additional utilities for Google Drive
+google-cloud-storage==2.10.0
+google-resumable-media==2.6.0
+
+# Environment management
+python-dotenv==1.0.0
+
+# Enhanced HTTP handling
+requests==2.31.0
+urllib3==2.0.7
+
+# JSON Web Token support (for advanced auth)
+PyJWT==2.8.0
+
+# Progress tracking for large uploads/downloads
+tqdm==4.66.1
+
+# Async support for better performance
+aiohttp==3.9.1
+asyncio-throttle==1.0.2
+
+# File type detection
+python-magic==0.4.27
+
+# Image optimization for cloud storage
+Pillow==10.0.1
+
+# Caching for API responses
+requests-cache==1.1.1
+
+# Rate limiting
+ratelimit==2.2.1

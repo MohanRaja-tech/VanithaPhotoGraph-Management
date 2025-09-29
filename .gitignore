@@ -1,0 +1,236 @@
+# Face-Based Photo Search & Management System - .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# Database Files
+*.db
+*.sqlite
+*.sqlite3
+face_database.db
+photo_search.db
+
+# Log Files
+*.log
+photo_search.log
+face_recognition.log
+indexing.log
+
+# Configuration Files (if they contain sensitive data)
+config.ini
+.env
+.env.local
+.env.production
+.env.staging
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Flask
+instance/
+.webassets-cache
+
+# Image Processing Cache
+thumbnails/
+cache/
+temp/
+tmp/
+
+# Face Recognition Models Cache
+.face_recognition_models/
+models/
+
+# Test Files
+test_images/
+sample_photos/
+test_data/
+
+# Documentation Build
+docs/_build/
+site/
+
+# Coverage Reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# celery beat schedule file
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# PyCharm
+.idea/
+
+# System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Backup Files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Temporary Files
+*.tmp
+*.temp
+*~
+
+# Node.js (if using any JS build tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Package Files
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# Local Development
+local_settings.py
+local_config.py
+
+# User-specific files
+uploads/
+user_data/
+personal_photos/
+
+# Performance and Profiling
+*.prof
+*.lprof
+
+# Security
+*.pem
+*.key
+*.crt
+secrets.json
+
+# Large Files (Git LFS should be used instead)
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.wmv
+*.flv
+*.webm
+
+# Compiled Extensions
+*.dll
+*.dylib
+*.so
+
+# Distribution / Packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST

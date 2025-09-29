@@ -1,0 +1,19 @@
+Face-Based Photo Search & Management
+Managing and organizing large volumes of photos is a critical task for professional
+photographers, yet the process is often inefficient and time-consuming. When clients request
+photos featuring a particular person, photographers must manually sift through thousands of
+images spread across local folders and cloud platforms like Google Drive. This manual effort
+not only slows down workflows but also increases the chances of missing important photos,
+ultimately affecting client satisfaction.
+Your challenge is to design a unified digital platform that simplifies face-based image
+search and management. The platform should allow users to select a photo, detect faces
+within it, and automatically retrieve all other images containing the same face. In cases where
+multiple faces are present in a single photo, the system must enable users to select the desired
+face to perform the search. Additionally, the solution should support essential file
+management features such as selection, copy, and cut, empowering users to curate and
+organize results effortlessly.
+The solution must work seamlessly across both local storage and Google Drive, providing
+photographers with a single, user-friendly platform for managing and retrieving images. By
+solving this problem, participants will create an intelligent and scalable solution that
+transforms the way photographers handle large photo collections, saving time and delivering
+more efficient, professional services to clients.

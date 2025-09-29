@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face-Based Photo Search & Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-search"></i> Face-Based Photo Search & Management</h1>
+            <p>Professional photo organization using advanced face recognition</p>
+        </header>
+
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="search">
+                <i class="fas fa-search"></i> Face Search
+            </button>
+            <button class="tab-btn" data-tab="manage">
+                <i class="fas fa-folder"></i> Local Folders
+            </button>
+            <button class="tab-btn" data-tab="drive">
+                <i class="fab fa-google-drive"></i> Google Drive
+            </button>
+            <button class="tab-btn" data-tab="stats">
+                <i class="fas fa-chart-bar"></i> Statistics
+            </button>
+        </nav>
+
+        <!-- Face Search Tab -->
+        <div id="search-tab" class="tab-content active">
+            <div class="search-layout">
+                <div class="left-panel">
+                    <div class="panel-card">
+                        <h3><i class="fas fa-image"></i> Select Reference Image</h3>
+                        
+                        <!-- Image Source Selection -->
+                        <div class="image-source-toggle">
+                            <div class="toggle-group">
+                                <input type="radio" id="source-file" name="image-source" value="file" checked>
+                                <label for="source-file" class="toggle-option">
+                                    <i class="fas fa-file-image"></i> Upload File
+                                </label>
+                                
+                                <input type="radio" id="source-camera" name="image-source" value="camera">
+                                <label for="source-camera" class="toggle-option">
+                                    <i class="fas fa-camera"></i> Live Camera
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- File Upload Area -->
+                        <div id="file-upload-section" class="upload-area">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Click to select or drag & drop an image</p>
+                            <input type="file" id="file-input" accept="image/*" hidden>
+                        </div>
+                        
+                        <!-- Camera Capture Area -->
+                        <div id="camera-capture-section" class="camera-area" style="display: none;">
+                            <button id="start-camera-btn" class="btn btn-primary">
+                                <i class="fas fa-camera"></i> Start Camera
+                            </button>
+                        </div>
+                        
+                        <div id="selected-image" class="selected-image" style="display: none;">
+                            <img id="preview-image" alt="Selected image">
+                        </div>
+                    </div>
+
+                    <div class="panel-card">
+                        <h3><i class="fas fa-database"></i> Search Source</h3>
+                        <div class="search-source-toggle">
+                            <div class="toggle-group">
+                                <input type="radio" id="search-local" name="search-source" value="local" checked>
+                                <label for="search-local" class="toggle-option">
+                                    <i class="fas fa-folder"></i> Local Storage
+                                </label>
+                                
+                                <input type="radio" id="search-drive" name="search-source" value="drive">
+                                <label for="search-drive" class="toggle-option">
+                                    <i class="fab fa-google-drive"></i> Google Drive
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-card" id="faces-panel" style="display: none;">
+                        <h3><i class="fas fa-user"></i> Detected Faces</h3>
+                        <div id="detected-faces" class="faces-grid"></div>
+                        <button id="search-btn" class="btn btn-primary" disabled>
+                            <i class="fas fa-search"></i> Search Similar Faces
+                        </button>
+                    </div>
+                </div>
+
+                <div class="right-panel">
+                    <div class="panel-card">
+                        <div class="results-header">
+                            <h3><i class="fas fa-images"></i> Search Results</h3>
+                            <div class="results-toolbar">
+                                <button id="select-all-btn" class="btn btn-sm">Select All</button>
+                                <button id="clear-selection-btn" class="btn btn-sm">Clear</button>
+                                <div class="separator"></div>
+                                <button id="copy-btn" class="btn btn-sm btn-success">
+                                    <i class="fas fa-copy"></i> Copy
+                                </button>
+                                <button id="move-btn" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-cut"></i> Move
+                                </button>
+                                <button id="delete-btn" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="search-results" class="results-container">
+                            <div class="no-results">
+                                <i class="fas fa-search"></i>
+                                <p>Select a reference image and face to start searching</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Folder Management Tab -->
+        <div id="manage-tab" class="tab-content">
+            <div class="manage-layout">
+                <div class="panel-card">
+                    <h3><i class="fas fa-folder-open"></i> Select Photo Directory</h3>
+                    
+                    <!-- Current Selected Folder -->
+                    <div class="current-folder-section">
+                        <h4>Current Directory:</h4>
+                        <div id="current-folder-display" class="current-folder">
+                            <span id="current-folder-text">No directory selected</span>
+                            <button id="index-folders-btn" class="btn btn-success" disabled>
+                                <i class="fas fa-sync"></i> Index Photos
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Folder Browser -->
+                    <div class="folder-browser-section">
+                        <h4>Browse Directories:</h4>
+                        <div class="folder-browser">
+                            <div class="current-path">
+                                <i class="fas fa-folder"></i>
+                                <span id="current-path-text">/</span>
+                            </div>
+                            <div id="folder-list" class="folder-list"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-section" id="progress-section" style="display: none;">
+                        <h4>Indexing Progress</h4>
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <p id="progress-text">Ready</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Google Drive Tab -->
+        <div id="drive-tab" class="tab-content">
+            <div class="drive-layout">
+                <!-- Authentication Section -->
+                <div class="panel-card" id="drive-auth-section">
+                    <h3><i class="fab fa-google-drive"></i> Google Drive Connection</h3>
+                    <div id="drive-status" class="drive-status">
+                        <div class="status-indicator" id="drive-indicator">
+                            <i class="fas fa-circle" id="status-icon"></i>
+                            <span id="status-text">Checking connection...</span>
+                        </div>
+                        <div class="drive-actions">
+                            <button id="connect-drive-btn" class="btn btn-primary" style="display: none;">
+                                <i class="fab fa-google"></i> Connect Google Drive
+                            </button>
+                            <button id="disconnect-drive-btn" class="btn btn-secondary" style="display: none;">
+                                <i class="fas fa-sign-out-alt"></i> Disconnect
+                            </button>
+                            <button id="test-drive-btn" class="btn btn-success" style="display: none;">
+                                <i class="fas fa-check"></i> Test Connection
+                            </button>
+                        </div>
+                    </div>
+                    <div id="drive-user-info" class="drive-user-info" style="display: none;">
+                        <h4>Connected Account:</h4>
+                        <p><strong>Email:</strong> <span id="user-email"></span></p>
+                        <p><strong>Name:</strong> <span id="user-name"></span></p>
+                    </div>
+                </div>
+
+                <!-- Drive Folders Section -->
+                <div class="panel-card" id="drive-folders-section" style="display: none;">
+                    <h3><i class="fas fa-cloud-download-alt"></i> Google Drive Folders</h3>
+                    
+                    <!-- Breadcrumb Navigation -->
+                    <div class="drive-breadcrumb" id="drive-breadcrumb">
+                        <button class="breadcrumb-item active" data-folder-id="root">
+                            <i class="fas fa-home"></i> My Drive
+                        </button>
+                    </div>
+                    
+                    <!-- Folder List -->
+                    <div class="drive-folder-list" id="drive-folder-list">
+                        <div class="loading-message">
+                            <i class="fas fa-spinner fa-spin"></i> Loading folders...
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sync Management Section -->
+                <div class="panel-card" id="drive-sync-section" style="display: none;">
+                    <h3><i class="fas fa-sync"></i> Sync Management</h3>
+                    
+                    <!-- Sync Progress -->
+                    <div class="sync-progress-section" id="sync-progress-section" style="display: none;">
+                        <h4>Sync Progress</h4>
+                        <div class="progress-bar">
+                            <div id="sync-progress-fill" class="progress-fill"></div>
+                        </div>
+                        <p id="sync-progress-text">Ready</p>
+                        <button id="stop-sync-btn" class="btn btn-danger btn-sm">
+                            <i class="fas fa-stop"></i> Stop Sync
+                        </button>
+                    </div>
+                    
+                    <!-- Synced Folders List -->
+                    <div class="synced-folders-section">
+                        <h4>Synced Folders</h4>
+                        <div id="synced-folders-list" class="synced-folders-list">
+                            <div class="no-synced-folders">
+                                <i class="fas fa-cloud"></i>
+                                <p>No folders synced yet. Select a folder from Google Drive to sync.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Tab -->
+        <div id="stats-tab" class="tab-content">
+            <div class="stats-layout">
+                <div class="panel-card">
+                    <h3><i class="fas fa-chart-bar"></i> Database Statistics</h3>
+                    <div id="stats-content" class="stats-grid">
+                        <div class="stat-item">
+                            <i class="fas fa-images"></i>
+                            <div>
+                                <span class="stat-number" id="total-images">0</span>
+                                <span class="stat-label">Total Images</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-user"></i>
+                            <div>
+                                <span class="stat-number" id="total-faces">0</span>
+                                <span class="stat-label">Total Faces</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-folder"></i>
+                            <div>
+                                <span class="stat-number" id="active-folders">0</span>
+                                <span class="stat-label">Active Folders</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-database"></i>
+                            <div>
+                                <span class="stat-number" id="database-size">0 MB</span>
+                                <span class="stat-label">Database Size</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="refresh-stats-btn" class="btn btn-primary">
+                        <i class="fas fa-sync"></i> Refresh Statistics
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p id="loading-text">Processing...</p>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="folder-modal" class="modal" style="display: none;">
+        <div class="modal-content directory-browser-modal">
+            <div class="modal-header">
+                <h3 id="operation-title">Select Destination Folder</h3>
+                <button id="close-folder-modal" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- Current Path Display -->
+            <div class="current-path-display">
+                <i class="fas fa-folder"></i>
+                <span id="modal-current-path">/</span>
+                <button id="select-current-folder-btn" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-check"></i> Select Current Folder
+                </button>
+            </div>
+            
+            <!-- Directory Browser -->
+            <div class="directory-browser-container">
+                <div id="modal-folder-list" class="modal-folder-list">
+                    <div class="loading-message">
+                        <i class="fas fa-spinner fa-spin"></i> Loading directories...
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Selected Path Display -->
+            <div class="selected-path-display">
+                <label>Selected Destination:</label>
+                <div id="selected-destination-path" class="selected-path">
+                    No folder selected
+                </div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button type="button" id="test-connection-btn" class="btn btn-warning btn-sm" onclick="testConnection()">
+                    <i class="fas fa-flask"></i> Test Connection
+                </button>
+                <button type="button" id="confirm-operation" class="btn btn-primary" disabled>
+                    <i class="fas fa-check"></i> <span id="confirm-button-text">Confirm</span>
+                </button>
+                <button type="button" id="cancel-operation" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera Capture Modal -->
+    <div id="camera-modal" class="modal" style="display: none;">
+        <div class="modal-content camera-modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-camera"></i> Live Camera Capture</h3>
+                <button id="close-camera-modal" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="camera-container">
+                <video id="camera-video" autoplay playsinline></video>
+                <canvas id="camera-canvas" style="display: none;"></canvas>
+                <div id="camera-preview" class="camera-preview" style="display: none;">
+                    <img id="captured-image" alt="Captured image">
+                </div>
+            </div>
+            <div class="camera-controls">
+                <button id="capture-btn" class="btn btn-primary" style="display: none;">
+                    <i class="fas fa-camera"></i> Capture Photo
+                </button>
+                <button id="retake-btn" class="btn btn-secondary" style="display: none;">
+                    <i class="fas fa-redo"></i> Retake
+                </button>
+                <button id="use-captured-btn" class="btn btn-success" style="display: none;">
+                    <i class="fas fa-check"></i> Use This Photo
+                </button>
+                <button id="cancel-camera-btn" class="btn btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+            <div id="camera-error" class="camera-error" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Unable to access camera. Please check permissions and try again.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading">
+        <i class="fas fa-spinner"></i>
+        <span>Loading...</span>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        // Initialize the app
+        const app = new PhotoSearchApp();
+        
+        // Simple test function
+        function testConnection() {
+            console.log('Testing connection to server...');
+            
+            fetch('/api/file_operations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    operation: 'copy',
+                    file_paths: ['/home/mohan/Desktop/Mohan/Vanithaphotography/Webcam/2025-09-27-111304.jpg'],
+                    destination: '/home/mohan/Documents'
+                })
+            })
+            .then(response => {
+                console.log('Test response status:', response.status);
+                return response.json();
+            })
+            .then(data => {
+                console.log('Test response data:', data);
+                alert('Test successful! Check console and Documents folder.');
+            })
+            .catch(error => {
+                console.error('Test failed:', error);
+                alert('Test failed: ' + error.message);
+            });
+        }
+    </script>
+</body>
+</html>

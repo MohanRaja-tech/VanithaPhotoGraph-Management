@@ -1,0 +1,27 @@
+
+
+    User selects a reference photo for face search.
+
+    Detect faces in the selected image using a face detection model (e.g., Haar Cascade, MTCNN, Dlib, or FaceNet-based detection).
+
+    Display all detected faces, allowing user to choose the target face for search.
+
+    Scan specified local folders recursively to index all image files (JPEG, PNG, etc.).
+
+    For each image, detect faces and extract facial embeddings/features for accurate matching.
+
+    Compare chosen reference face's features against features from all other images:
+
+        Identify images containing the same face using similarity thresholds.
+
+    Present the search results in a preview gallery with selection options.
+
+    Enable users to perform file management actions (select, copy, cut/move) directly from the results.
+
+    Provide user interface for adding/removing folders from the local search scope.
+
+    Support multi-threaded or batched processing to optimize performance for large folder structures.
+
+    Persist face feature database locally to avoid redundant computation for future searches.
+
+    Integrate basic error handling (unsupported formats, unreadable files, duplicate detection).
